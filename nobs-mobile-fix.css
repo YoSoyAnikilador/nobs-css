@@ -1,0 +1,128 @@
+/* ===== NOBS MOBILE FIX ===== */
+/* Pegar debajo de stark-nobs.css o cargar como CSS externo aparte */
+
+@media (max-width: 768px) {
+
+    /* --- Banner promo/countdown --- */
+    .special-event-alert {
+        grid-template-columns: 1fr !important;
+        min-height: auto !important;
+    }
+    .special-event-alert > div:first-child,
+    .special-event-alert > div:last-child {
+        display: none !important; /* oculta laterales imagen en movil, sobran */
+    }
+    .special-event-alert [x-data^="timer"] {
+        padding: 1rem !important;
+        gap: 0.8rem !important;
+    }
+    .special-event-alert [x-data^="timer"] > div:first-child {
+        font-size: 1.1rem !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+    .special-event-alert [x-data^="timer"] > div:nth-child(2) {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+
+    /* --- Navbar --- */
+    .top-nav {
+        flex-wrap: wrap !important;
+        padding: 8px !important;
+    }
+    .top-nav__left {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+    .quick-search {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+    .quick-search__input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .top-nav__main-menus {
+        display: none !important;
+    }
+    .top-nav.mobile .top-nav__main-menus {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+    .top-nav__ratio-bar {
+        flex-wrap: wrap !important;
+        font-size: 0.75rem !important;
+        gap: 4px !important;
+    }
+    .top-nav__ratio-bar li {
+        flex: 1 1 45% !important;
+    }
+
+    /* --- Secondary nav / breadcrumbs / tabs --- */
+    .secondary-nav {
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+    }
+    .nav-tabsV2 {
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        flex-wrap: nowrap !important;
+    }
+    .nav-tab-menu {
+        flex: 0 0 auto !important;
+    }
+
+    /* --- Forms (settings, edit profile, etc) --- */
+    .form__select,
+    .form__text,
+    .form__textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .panelV2 {
+        padding: 10px !important;
+        overflow-x: hidden !important;
+    }
+    .form__fieldset {
+        padding: 8px !important;
+    }
+    .accent-swatches {
+        flex-wrap: wrap !important;
+    }
+
+    /* --- Order list (drag and drop bloques home) --- */
+    .order__list {
+        font-size: 0.9rem !important;
+    }
+    .order__item {
+        padding: 8px 4px !important;
+    }
+
+    /* --- Tablas torrents (contenedor general) --- */
+    table {
+        display: block !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* --- Footer --- */
+    .footer__wrapper {
+        grid-template-columns: 1fr !important;
+        text-align: center !important;
+    }
+    .footer__stats {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+
+    /* --- Efectos fx canvas: apagar en movil pa rendimiento --- */
+    #nobs-fx {
+        display: none !important;
+    }
+}
