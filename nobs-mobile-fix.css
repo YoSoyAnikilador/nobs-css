@@ -1,6 +1,6 @@
 /* ===== NOBS MOBILE FIX ===== */
 /* Pegar debajo de stark-nobs.css o cargar como CSS externo aparte */
-@import url("https://yosoyanikilador.github.io/stark-nobs-css/nobs-mobile-fix.css");
+@import url("https://yosoyanikilador.github.io/nobs-css/nobs-mobile-fix.css");
 
 @media (max-width: 768px) {
 
