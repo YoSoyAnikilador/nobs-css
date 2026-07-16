@@ -18,17 +18,10 @@
         padding-right: 12px !important;
         box-sizing: border-box !important;
     }
-    /* espacio pa que la bottom nav no tape contenido */
     body {
         padding-bottom: 60px !important;
     }
 
-    /* ---------- HEADER / LOGO ---------- */
-    /* el tema pone .top-nav en display:grid con 6 columnas ("left . menus
-       . right toggle"), y .top-nav__right vive en la celda "right" (1fr de 6),
-       muy estrecha -> por eso las stats se cortaban a la derecha aunque
-       .top-nav__right en si tuviera flex-direction:column. Rompemos el
-       grid del padre por completo en movil. */
     .top-nav {
         display: flex !important;
         grid-template: none !important;
@@ -72,17 +65,26 @@
     .top-nav__main-menus {
         display: none !important;
     }
-    /* OJO: Alpine pone la clase "mobile" directamente en este <ul>
-       (x-bind:class="expanded && 'mobile'"), no en un ancestro .top-nav */
     .top-nav__main-menus.mobile {
-        display: flex !important;
-        flex-direction: column !important;
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
         width: 100% !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        background: #0a0a0a !important;
+        z-index: 9999 !important;
+        padding: 70px 12px 90px 12px !important;
+        box-sizing: border-box !important;
         gap: 0 !important;
     }
     .top-nav__main-menus.mobile > li {
         width: 100% !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        position: static !important;
     }
     .top-nav__main-menus.mobile > li > a,
     .top-nav__main-menus.mobile > li > button {
@@ -92,12 +94,19 @@
         padding: 10px 6px !important;
         font-size: 0.95rem !important;
     }
-    /* submenus desplegables dentro de cada item del menu movil */
+    .top-nav__main-menus.mobile .top-nav__dropdown {
+        position: static !important;
+    }
     .top-nav__main-menus.mobile .top-nav__dropdown ul {
         position: static !important;
         display: none !important;
         width: 100% !important;
+        max-width: 100% !important;
         padding-left: 12px !important;
+        margin: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
     }
     .top-nav__main-menus.mobile .top-nav__dropdown.open ul,
     .top-nav__main-menus.mobile .top-nav__dropdown:focus-within ul {
@@ -105,10 +114,6 @@
         flex-direction: column !important;
     }
 
-    /* ---------- CONTENEDOR .top-nav__right (envuelve el ratio-bar) ---------- */
-    /* en desktop es display:flex; justify-content:end -> en movil se queda
-       pegado a la derecha y se corta. Lo forzamos a ocupar todo el ancho
-       y alinear el contenido a la izquierda */
     .top-nav__right {
         grid-area: unset !important;
         display: flex !important;
@@ -119,7 +124,6 @@
         column-gap: 0 !important;
         order: 3 !important;
     }
-    /* que .top-nav__left tambien salga del grid-area y ocupe su fila propia */
     .top-nav__left {
         grid-area: unset !important;
         order: 1 !important;
@@ -129,8 +133,6 @@
         order: 2 !important;
     }
 
-    /* ---------- RATIO BAR (stats arriba) ---------- */
-    /* fila unica scrolleable en vez de grid que se descuadra */
     .top-nav__ratio-bar {
         justify-content: flex-start !important;
         display: flex !important;
@@ -156,8 +158,34 @@
         gap: 3px !important;
     }
 
+    /* icon-bar (mensajes, notificaciones, avatar+dropdown de perfil):
+       el dropdown de perfil tambien es position:absolute de serie
+       en el tema de escritorio -> lo aplanamos igual que los submenus */
     .top-nav__icon-bar {
-        gap: 12px !important;
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0 !important;
+    }
+    .top-nav__icon-bar .top-nav__dropdown {
+        position: static !important;
+        width: 100% !important;
+    }
+    .top-nav__icon-bar .top-nav__dropdown ul {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        display: none !important;
+        margin: 0 !important;
+        padding-left: 12px !important;
+    }
+    .top-nav__icon-bar .top-nav__dropdown.open ul,
+    .top-nav__icon-bar .top-nav__dropdown:focus-within ul {
+        display: flex !important;
+        flex-direction: column !important;
     }
     .top-nav__profile-image {
         width: 28px !important;
@@ -224,7 +252,6 @@
     }
 
     /* ---------- QUICK ACCESS GRID (Torrents/Comunidad/etc) ---------- */
-    /* Se inyecta con JS debajo del header, ver bloque script al final del css no aplica -> ver instrucciones */
     .nobs-quick-access {
         display: grid !important;
         grid-template-columns: repeat(4, 1fr) !important;
@@ -278,7 +305,6 @@
         gap: 6px !important;
         width: 100% !important;
     }
-    /* nombre de usuario / bot: nunca se parte */
     .chatbox-message__address,
     .user-tag__link {
         white-space: nowrap !important;
@@ -295,7 +321,6 @@
         white-space: nowrap !important;
         flex: 0 0 auto !important;
     }
-    /* el texto del mensaje SI puede partirse */
     .chatbox-message__content,
     .bot-message {
         display: block !important;
@@ -308,7 +333,7 @@
     }
     .chatbox-message__aside,
     .chatbox-message__figure {
-        display: none !important; /* ahorra ancho, avatares fuera en movil */
+        display: none !important;
     }
     .chatbox__chatroom {
         max-height: 340px !important;
