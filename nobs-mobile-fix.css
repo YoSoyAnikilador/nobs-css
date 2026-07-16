@@ -1,5 +1,5 @@
 /* ===================================================================
-   NOBS MOBILE APP-LIKE REDESIGN v3
+   NOBS MOBILE APP-LIKE REDESIGN v2
    Cargar via @import en stark-nobs.css, o como CSS externo aparte.
    NO poner ningun @import dentro de este archivo.
    =================================================================== */
@@ -62,85 +62,108 @@
         flex: 0 0 auto !important;
     }
 
-    /* =================================================================
-       PANEL HAMBURGUESA COMPLETO
-       Fusiona: icon-bar (perfil/correo/notis) + main-menus (Torrents,
-       Comunidad, Soporte, Otro) en un unico panel a pantalla completa
-       con acordeon. Usamos order sobre EL PROPIO .top-nav (flex
-       container) en vez de depender de :has(), que es mas fragil.
-       ================================================================= */
-
     .top-nav__main-menus {
         display: none !important;
     }
-
-    .top-nav.mobile,
-    .top-nav:has(> .top-nav__main-menus.mobile) {
-        position: fixed !important;
-        inset: 0 !important;
-        height: 100vh !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        background: #0a0a0a !important;
-        z-index: 9998 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        padding: 0 0 40px 0 !important;
+    .top-nav__main-menus.mobile {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: transparent !important;
+        z-index: auto !important;
+        padding: 0 !important;
         box-sizing: border-box !important;
         gap: 0 !important;
-    }
-    .top-nav.mobile > .top-nav__left,
-    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__left {
-        display: none !important;
-    }
-    .top-nav.mobile > .top-nav__toggle,
-    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__toggle {
-        position: fixed !important;
-        top: 14px !important;
-        right: 14px !important;
-        z-index: 10000 !important;
-        font-size: 1.3rem !important;
-        color: #fff !important;
-        background: rgba(255,255,255,0.08) !important;
-        border-radius: 50% !important;
-        width: 38px !important;
-        height: 38px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    /* Orden explicito de los 3 hijos directos de .top-nav cuando esta
-       expandido: 1) perfil (top-nav__right), 2) menu principal
-       (top-nav__main-menus), 3) toggle (fixed, no cuenta en flow) */
-    .top-nav.mobile > .top-nav__right,
-    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__right {
         order: 1 !important;
     }
-    .top-nav__main-menus.mobile {
-        order: 2 !important;
+    .top-nav__main-menus.mobile > li {
+        width: 100% !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        position: static !important;
+    }
+    /* cada item trae DOS <a>: uno para hover de escritorio (--nontouch,
+       con href real) y otro para tap (--touch, sin href, abre el submenu).
+       En movil solo queremos el segundo; el primero sobra y duplica texto. */
+    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--nontouch {
+        display: none !important;
+    }
+    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--touch,
+    .top-nav__main-menus.mobile > li > a:not(.top-nav__dropdown--nontouch):not(.top-nav__dropdown--touch),
+    .top-nav__main-menus.mobile > li > button {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding: 10px 6px !important;
+        font-size: 0.95rem !important;
+    }
+    .top-nav__main-menus.mobile .top-nav__dropdown {
+        position: static !important;
+    }
+    .top-nav__main-menus.mobile .top-nav__dropdown ul {
+        position: static !important;
+        display: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 12px !important;
+        margin: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    .top-nav__main-menus.mobile .top-nav__dropdown.open ul,
+    .top-nav__main-menus.mobile .top-nav__dropdown:focus-within ul {
+        display: flex !important;
+        flex-direction: column !important;
     }
 
     .top-nav__right {
         grid-area: unset !important;
+        position: static !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         justify-content: flex-start !important;
         width: 100% !important;
         column-gap: 0 !important;
+        order: 2 !important;
+        margin-top: 16px !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+        padding-top: 16px !important;
     }
     .top-nav__left {
         grid-area: unset !important;
         order: 1 !important;
     }
-
-    .top-nav__right.mobile {
-        background: linear-gradient(180deg, rgba(191,85,236,0.10), rgba(191,85,236,0.02)) !important;
-        padding: 60px 16px 14px 16px !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-        flex-shrink: 0 !important;
+    /* Cuando el hamburguesa esta abierto, .top-nav__main-menus Y
+       .top-nav__right (que envuelve correo/notificaciones/perfil) reciben
+       AMBOS la clase .mobile via el mismo x-bind:class="expanded && 'mobile'".
+       Es decir, ya comparten el mismo interruptor -- solo hacia falta
+       fusionarlos visualmente en un unico panel en vez de que cada uno
+       flote con su propio position:fixed/absolute por separado. */
+    .top-nav:has(.top-nav__main-menus.mobile) {
+        position: fixed !important;
+        inset: 0 !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        background: #0a0a0a !important;
+        z-index: 9998 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 70px 12px 90px 12px !important;
+        box-sizing: border-box !important;
+        gap: 0 !important;
+    }
+    .top-nav:has(.top-nav__main-menus.mobile) .top-nav__left {
+        display: none !important; /* logo+buscador ya visibles en la barra fija de arriba */
+    }
+    .top-nav:has(.top-nav__main-menus.mobile) .top-nav__toggle {
+        position: fixed !important;
+        top: 14px !important;
+        right: 14px !important;
+        z-index: 10000 !important;
     }
 
     .top-nav__ratio-bar {
@@ -149,11 +172,10 @@
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        gap: 12px !important;
+        gap: 10px !important;
         width: 100% !important;
         font-size: 0.72rem !important;
-        padding-bottom: 8px !important;
-        margin-bottom: 6px !important;
+        padding-bottom: 4px !important;
         scrollbar-width: thin !important;
     }
     .top-nav__ratio-bar li {
@@ -161,281 +183,73 @@
         white-space: nowrap !important;
         display: flex !important;
         align-items: center !important;
-        gap: 4px !important;
-        background: rgba(255,255,255,0.05) !important;
-        border-radius: 6px !important;
-        padding: 4px 8px !important;
+        gap: 3px !important;
     }
     .top-nav__ratio-bar li a {
         display: flex !important;
         align-items: center !important;
-        gap: 4px !important;
+        gap: 3px !important;
     }
 
-    .top-nav__username--highresolution {
-        display: block !important;
-        font-size: 1.15rem !important;
-        font-weight: 700 !important;
-        margin: 6px 0 14px 0 !important;
-    }
-
-    /* correo + notificaciones: fila compacta, uno junto al otro, no
-       apiladas con hueco enorme entre medias */
+    /* icon-bar (mensajes, notificaciones, avatar+dropdown de perfil):
+       el dropdown de perfil tambien es position:absolute de serie
+       en el tema de escritorio -> lo aplanamos igual que los submenus */
     .top-nav__icon-bar {
         width: 100% !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
+        flex-direction: column !important;
         align-items: stretch !important;
-        gap: 8px !important;
-        margin-bottom: 10px !important;
+        gap: 0 !important;
     }
-    .top-nav__icon-bar > li {
-        border-top: none !important;
-        flex: 1 1 auto !important;
-        min-width: 0 !important;
-    }
-    .top-nav__icon-bar .top-nav--right__icon-link {
-        position: relative !important;
+    /* correo y notificaciones: como items normales de la lista */
+    .top-nav__icon-bar > li > a.top-nav--right__icon-link {
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 10px !important;
         width: 100% !important;
-        padding: 9px 10px !important;
-        font-size: 0.82rem !important;
-        background: rgba(255,255,255,0.05) !important;
-        border-radius: 8px !important;
-        box-sizing: border-box !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        padding: 10px 6px !important;
+        font-size: 0.95rem !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
     }
-    .top-nav__icon-bar li:has(.fa-envelope) .top-nav--right__icon-link::after {
-        content: "Bandeja";
-    }
-    .top-nav__icon-bar li:has(.fa-bell) .top-nav--right__icon-link::after {
-        content: "Notis";
-    }
-    /* punto/badge de actividad: pegado a la esquina del propio icono,
-       no flotando lejos a la derecha del bloque */
-    .top-nav__icon-bar .top-nav--right__icon-link i {
-        position: relative !important;
-        flex: 0 0 auto !important;
-    }
-    .top-nav__icon-bar .top-nav--right__icon-link i::after {
-        content: "" !important;
-    }
-    .top-nav__icon-bar .top-nav--right__icon-link > span,
-    .top-nav__icon-bar .top-nav--right__icon-link > .badge,
-    .top-nav__icon-bar .top-nav--right__icon-link > small {
-        position: absolute !important;
-        top: 4px !important;
-        left: 22px !important;
-        right: auto !important;
-        transform: none !important;
-        width: 8px !important;
-        height: 8px !important;
-        min-width: 8px !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
-        font-size: 0 !important;
-        line-height: 0 !important;
-    }
-
     .top-nav__icon-bar .top-nav__dropdown {
         position: static !important;
         width: 100% !important;
-        flex: 1 1 100% !important;
     }
     .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--nontouch {
         display: none !important;
     }
     .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--touch {
-        position: relative !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
-        gap: 10px !important;
         width: 100% !important;
-        padding: 10px 12px !important;
-        font-weight: 600 !important;
-        background: rgba(255,255,255,0.04) !important;
-        border-radius: 10px !important;
-        box-sizing: border-box !important;
+        padding: 10px 6px !important;
+        pointer-events: none !important; /* ya no hace falta tocarlo, esta forzado abierto */
     }
-    /* flecha acordeon tambien aqui, coherente con el menu principal */
-    .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--touch::after {
-        content: "\f078";
-        font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", FontAwesome;
-        font-weight: 900;
-        font-size: 0.7rem;
-        opacity: 0.5;
-        transition: transform 0.2s ease;
-        margin-left: auto;
-    }
-    .top-nav__icon-bar .top-nav__dropdown.open > a::after,
-    .top-nav__icon-bar .top-nav__dropdown:focus-within > a::after {
-        transform: rotate(180deg);
-    }
-    .top-nav__profile-image {
-        width: 32px !important;
-        height: 32px !important;
-        border-radius: 50% !important;
-        flex: 0 0 auto !important;
-    }
-
-    /* submenu del perfil: TARJETA que empuja el contenido hacia abajo,
-       nunca position:absolute flotando encima de otras cosas */
     .top-nav__icon-bar .top-nav__dropdown ul {
         position: static !important;
         width: 100% !important;
         max-width: 100% !important;
-        box-sizing: border-box !important;
-        display: none !important;
-        flex-direction: column !important;
-        margin: 6px 0 4px 0 !important;
-        padding: 6px !important;
-        background: rgba(255,255,255,0.045) !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
-        border-radius: 12px !important;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04) !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown.open ul,
-    .top-nav__icon-bar .top-nav__dropdown:focus-within ul {
-        display: flex !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown ul li {
-        width: 100% !important;
-        border-top: 1px solid rgba(255,255,255,0.05) !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown ul li:first-child {
-        border-top: none !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown ul li a,
-    .top-nav__icon-bar .top-nav__dropdown ul li button {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        width: 100% !important;
-        padding: 10px 8px !important;
-        font-size: 0.88rem !important;
-        opacity: 0.9 !important;
-        box-sizing: border-box !important;
-        border-radius: 6px !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown ul li a:active,
-    .top-nav__icon-bar .top-nav__dropdown ul li button:active {
-        background: rgba(255,255,255,0.06) !important;
-    }
-    .top-nav__icon-bar .top-nav__dropdown ul li i {
-        width: 18px !important;
-        text-align: center !important;
-        opacity: 0.7 !important;
-        flex: 0 0 auto !important;
-    }
-
-    /* =================================================================
-       MENU PRINCIPAL (Torrents / Comunidad / Soporte / Otro)
-       Acordeon a pantalla completa, sin superposiciones ni flotantes.
-       ================================================================= */
-    .top-nav__main-menus.mobile {
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        margin: 0 !important;
+        padding-left: 12px !important;
+        /* forzado siempre visible: no depende de .open ni de :focus-within */
         display: flex !important;
         flex-direction: column !important;
-        width: 100% !important;
-        padding: 4px 16px 0 16px !important;
-        box-sizing: border-box !important;
-        gap: 0 !important;
     }
-    .top-nav__main-menus.mobile > li {
-        width: 100% !important;
-        position: static !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-    }
-    .top-nav__main-menus.mobile > li:last-child {
-        border-bottom: none !important;
-    }
-
-    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--nontouch {
-        display: none !important;
-    }
-    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--touch,
-    .top-nav__main-menus.mobile > li > a:not(.top-nav__dropdown--nontouch):not(.top-nav__dropdown--touch) {
+    .top-nav__icon-bar .top-nav__dropdown ul li a {
+        padding: 9px 6px !important;
+        font-size: 0.9rem !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
-        padding: 16px 4px !important;
-        font-size: 1rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.02em !important;
+        gap: 8px !important;
     }
-    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--touch::after,
-    .top-nav__main-menus.mobile > li > a:not(.top-nav__dropdown--nontouch):not(.top-nav__dropdown--touch)::after {
-        content: "\f078";
-        font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", FontAwesome;
-        font-weight: 900;
-        font-size: 0.75rem;
-        opacity: 0.5;
-        transition: transform 0.2s ease;
-        margin-left: 8px;
-    }
-    .top-nav__main-menus.mobile > li.open > a::after,
-    .top-nav__main-menus.mobile > li:focus-within > a::after {
-        transform: rotate(180deg);
+    .top-nav__profile-image {
+        width: 28px !important;
+        height: 28px !important;
     }
 
-    .top-nav__main-menus.mobile .top-nav__dropdown {
-        position: static !important;
-    }
-
-    /* TARJETA de submenu: caja bien delimitada con borde y fondo propio,
-       separada del titulo de arriba, en vez de texto suelto flotando */
-    .top-nav__main-menus.mobile .top-nav__dropdown ul {
-        position: static !important;
-        display: none !important;
-        flex-direction: column !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        margin: 4px 0 14px 0 !important;
-        padding: 6px !important;
-        background: rgba(255,255,255,0.045) !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
-        border-radius: 12px !important;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04) !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown.open ul,
-    .top-nav__main-menus.mobile .top-nav__dropdown:focus-within ul {
-        display: flex !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown ul li {
-        width: 100% !important;
-        border-top: 1px solid rgba(255,255,255,0.05) !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown ul li:first-child {
-        border-top: none !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown ul li a {
-        display: flex !important;
-        align-items: center !important;
-        gap: 10px !important;
-        width: 100% !important;
-        padding: 10px 8px !important;
-        font-size: 0.88rem !important;
-        opacity: 0.9 !important;
-        box-sizing: border-box !important;
-        border-radius: 6px !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown ul li a:active {
-        background: rgba(255,255,255,0.06) !important;
-    }
-    .top-nav__main-menus.mobile .top-nav__dropdown ul li i {
-        width: 18px !important;
-        text-align: center !important;
-        opacity: 0.65 !important;
-        flex: 0 0 auto !important;
-    }
-
-    /* ---------- SECONDARY NAV / TABS ---------- */
+    /* ---------- SECONDARY NAV / TABS (perfil, torrents propios, etc) ---------- */
     .secondary-nav {
         padding: 4px 8px !important;
     }
@@ -494,7 +308,7 @@
         display: none !important;
     }
 
-    /* ---------- QUICK ACCESS GRID ---------- */
+    /* ---------- QUICK ACCESS GRID (Torrents/Comunidad/etc) ---------- */
     .nobs-quick-access {
         display: grid !important;
         grid-template-columns: repeat(4, 1fr) !important;
@@ -521,7 +335,7 @@
         font-size: 1.1rem !important;
     }
 
-    /* ---------- PANELS ---------- */
+    /* ---------- PANELS (news/chat/featured) ---------- */
     .panelV2 {
         margin: 0 0 12px 0 !important;
         border-radius: 8px !important;
@@ -531,7 +345,7 @@
         font-size: 0.9rem !important;
     }
 
-    /* ---------- CHAT FIX ---------- */
+    /* ---------- CHAT FIX (selectores reales UNIT3D) ---------- */
     .chatroom__messages {
         padding: 0 !important;
         margin: 0 !important;
@@ -649,7 +463,7 @@
         font-size: 0.7rem !important;
     }
 
-    /* ---------- BOTTOM APP NAV ---------- */
+    /* ---------- BOTTOM APP NAV (tipo app movil) ---------- */
     .nobs-bottom-nav {
         position: fixed !important;
         bottom: 0 !important;
