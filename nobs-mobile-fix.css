@@ -86,7 +86,14 @@
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
         position: static !important;
     }
-    .top-nav__main-menus.mobile > li > a,
+    /* cada item trae DOS <a>: uno para hover de escritorio (--nontouch,
+       con href real) y otro para tap (--touch, sin href, abre el submenu).
+       En movil solo queremos el segundo; el primero sobra y duplica texto. */
+    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--nontouch {
+        display: none !important;
+    }
+    .top-nav__main-menus.mobile > li > a.top-nav__dropdown--touch,
+    .top-nav__main-menus.mobile > li > a:not(.top-nav__dropdown--nontouch):not(.top-nav__dropdown--touch),
     .top-nav__main-menus.mobile > li > button {
         display: flex !important;
         align-items: center !important;
@@ -170,6 +177,9 @@
     .top-nav__icon-bar .top-nav__dropdown {
         position: static !important;
         width: 100% !important;
+    }
+    .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--nontouch {
+        display: none !important;
     }
     .top-nav__icon-bar .top-nav__dropdown ul {
         position: static !important;
