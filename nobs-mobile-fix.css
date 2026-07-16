@@ -24,7 +24,14 @@
     }
 
     /* ---------- HEADER / LOGO ---------- */
+    /* el tema pone .top-nav en display:grid con 6 columnas ("left . menus
+       . right toggle"), y .top-nav__right vive en la celda "right" (1fr de 6),
+       muy estrecha -> por eso las stats se cortaban a la derecha aunque
+       .top-nav__right en si tuviera flex-direction:column. Rompemos el
+       grid del padre por completo en movil. */
     .top-nav {
+        display: flex !important;
+        grid-template: none !important;
         flex-wrap: wrap !important;
         padding: 8px 10px !important;
         gap: 8px !important;
@@ -84,12 +91,23 @@
        pegado a la derecha y se corta. Lo forzamos a ocupar todo el ancho
        y alinear el contenido a la izquierda */
     .top-nav__right {
+        grid-area: unset !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         justify-content: flex-start !important;
         width: 100% !important;
         column-gap: 0 !important;
+        order: 3 !important;
+    }
+    /* que .top-nav__left tambien salga del grid-area y ocupe su fila propia */
+    .top-nav__left {
+        grid-area: unset !important;
+        order: 1 !important;
+    }
+    .top-nav__toggle {
+        grid-area: unset !important;
+        order: 2 !important;
     }
 
     /* ---------- RATIO BAR (stats arriba) ---------- */
