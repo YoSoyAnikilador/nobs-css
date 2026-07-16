@@ -135,12 +135,34 @@
         grid-area: unset !important;
         order: 1 !important;
     }
-    .top-nav__toggle {
-        grid-area: unset !important;
-        order: 2 !important;
-        position: relative !important;
+    /* Cuando el hamburguesa esta abierto, .top-nav__main-menus Y
+       .top-nav__right (que envuelve correo/notificaciones/perfil) reciben
+       AMBOS la clase .mobile via el mismo x-bind:class="expanded && 'mobile'".
+       Es decir, ya comparten el mismo interruptor -- solo hacia falta
+       fusionarlos visualmente en un unico panel en vez de que cada uno
+       flote con su propio position:fixed/absolute por separado. */
+    .top-nav:has(.top-nav__main-menus.mobile) {
+        position: fixed !important;
+        inset: 0 !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        background: #0a0a0a !important;
+        z-index: 9998 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 70px 12px 90px 12px !important;
+        box-sizing: border-box !important;
+        gap: 0 !important;
+    }
+    .top-nav:has(.top-nav__main-menus.mobile) .top-nav__left {
+        display: none !important; /* logo+buscador ya visibles en la barra fija de arriba */
+    }
+    .top-nav:has(.top-nav__main-menus.mobile) .top-nav__toggle {
+        position: fixed !important;
+        top: 14px !important;
+        right: 14px !important;
         z-index: 10000 !important;
-        font-size: 1.4rem !important;
     }
 
     .top-nav__ratio-bar {
