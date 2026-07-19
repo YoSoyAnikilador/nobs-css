@@ -61,13 +61,21 @@
     /* barra de busqueda: propia fila ancha, entre el logo pequeño de
        arriba y el titulo grande de abajo, en vez de apretada junto
        al logo en la misma linea */
+    .quick-search,
+    .quick-search.sf-hidden,
+    .quick-search__inputs,
+    .quick-search__inputs.sf-hidden {
+        display: block !important;
+    }
     .quick-search {
         order: 2 !important;
         flex: 1 1 100% !important;
         min-width: 0 !important;
         width: 100% !important;
+        max-width: 100% !important;
     }
     .quick-search__inputs {
+        position: static !important;
         width: 100% !important;
     }
     .quick-search__input {
