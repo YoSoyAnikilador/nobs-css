@@ -32,31 +32,63 @@
     .top-nav__left {
         width: 100% !important;
         display: flex !important;
+        flex-wrap: wrap !important;
         align-items: center !important;
         gap: 8px !important;
     }
     .top-nav__branding {
         flex: 0 0 auto !important;
+        order: 1 !important;
     }
     .top-nav__branding img {
         height: 24px !important;
     }
     .top-nav__site-logo {
-        display: none !important;
+        display: block !important;
+        order: 3 !important;
+        flex: 1 1 100% !important;
+        font-size: 1.4rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.03em !important;
+        line-height: 1.15 !important;
+        text-transform: uppercase !important;
+        margin: 6px 4px 4px 4px !important;
+        background: linear-gradient(90deg, #d080ff, #00e5ff) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+    /* barra de busqueda: propia fila ancha, entre el logo pequeño de
+       arriba y el titulo grande de abajo, en vez de apretada junto
+       al logo en la misma linea */
+    .quick-search,
+    .quick-search.sf-hidden,
+    .quick-search__inputs,
+    .quick-search__inputs.sf-hidden {
+        display: block !important;
     }
     .quick-search {
-        flex: 1 1 auto !important;
+        order: 2 !important;
+        flex: 1 1 100% !important;
         min-width: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .quick-search__inputs {
+        position: static !important;
+        width: 100% !important;
     }
     .quick-search__input {
         width: 100% !important;
         box-sizing: border-box !important;
-        font-size: 0.9rem !important;
-        padding: 8px 10px !important;
+        font-size: 0.95rem !important;
+        padding: 10px 14px !important;
+        border-radius: 8px !important;
     }
-    a[href*="/gaming"] {
-        font-size: 0.8rem !important;
-        padding: 4px 8px !important;
+    /* boton Arcade sale de la barra superior; se reubica dentro del
+       panel hamburguesa, ver seccion mas abajo */
+    .top-nav__left > a[href*="/gaming"] {
+        display: none !important;
     }
     .top-nav__toggle {
         flex: 0 0 auto !important;
@@ -66,10 +98,8 @@
        PANEL HAMBURGUESA COMPLETO
        Fusiona: icon-bar (perfil/correo/notis) + main-menus (Torrents,
        Comunidad, Soporte, Otro) en un unico panel a pantalla completa
-       con acordeon. El propio <nav class="top-nav"> recibe la clase
-       "mobile" via x-bind:class="expanded && 'mobile'" (confirmado en
-       el HTML real), asi que targeteamos .top-nav.mobile directamente
-       -- mantenemos el :has() solo como red de seguridad.
+       con acordeon. Usamos order sobre EL PROPIO .top-nav (flex
+       container) en vez de depender de :has(), que es mas fragil.
        ================================================================= */
 
     .top-nav__main-menus {
@@ -94,7 +124,27 @@
     }
     .top-nav.mobile > .top-nav__left,
     .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__left {
+        display: flex !important;
+        order: 2 !important;
+        width: 100% !important;
+        padding: 0 16px !important;
+        box-sizing: border-box !important;
+        margin: 4px 0 8px 0 !important;
+    }
+    /* dentro del panel expandido, ocultamos todo lo que NO sea el
+       boton Arcade (logo, buscador ya estan arriba en su propio sitio) */
+    .top-nav.mobile > .top-nav__left > *:not(a[href*="/gaming"]),
+    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__left > *:not(a[href*="/gaming"]) {
         display: none !important;
+    }
+    .top-nav.mobile > .top-nav__left > a[href*="/gaming"],
+    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__left > a[href*="/gaming"] {
+        display: flex !important;
+        width: 100% !important;
+        justify-content: center !important;
+        font-size: 1rem !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
     }
     .top-nav.mobile > .top-nav__toggle,
     .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__toggle {
@@ -113,20 +163,15 @@
         justify-content: center !important;
     }
 
-    /* Orden explicito de los hijos directos de .top-nav cuando esta
+    /* Orden explicito de los 3 hijos directos de .top-nav cuando esta
        expandido: 1) perfil (top-nav__right), 2) menu principal
-       (top-nav__main-menus). display:flex + flex-basis:auto forzados
-       para que ninguna regla previa (display:none del modo escritorio)
-       se cuele y deje la seccion vacia. */
+       (top-nav__main-menus), 3) toggle (fixed, no cuenta en flow) */
     .top-nav.mobile > .top-nav__right,
     .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__right {
         order: 1 !important;
-        flex: 0 0 auto !important;
     }
-    .top-nav.mobile > .top-nav__main-menus.mobile,
-    .top-nav:has(> .top-nav__main-menus.mobile) > .top-nav__main-menus.mobile {
-        order: 2 !important;
-        flex: 1 0 auto !important;
+    .top-nav__main-menus.mobile {
+        order: 3 !important;
     }
 
     .top-nav__right {
@@ -150,33 +195,31 @@
         flex-shrink: 0 !important;
     }
 
-    /* ---------- STATS: todas visibles, sin scroll, en 2-3 filas ---------- */
     .top-nav__ratio-bar {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
+        justify-content: flex-start !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        overflow-x: visible !important;
         gap: 6px !important;
         width: 100% !important;
-        font-size: 0.68rem !important;
+        font-size: 0.7rem !important;
+        padding-bottom: 8px !important;
         margin-bottom: 6px !important;
     }
     .top-nav__ratio-bar li {
+        flex: 0 1 auto !important;
         white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important;
         gap: 4px !important;
         background: rgba(255,255,255,0.05) !important;
         border-radius: 6px !important;
-        padding: 6px 4px !important;
+        padding: 4px 7px !important;
     }
     .top-nav__ratio-bar li a {
         display: flex !important;
         align-items: center !important;
-        gap: 3px !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        gap: 4px !important;
     }
 
     .top-nav__username--highresolution {
@@ -186,7 +229,8 @@
         margin: 6px 0 14px 0 !important;
     }
 
-    /* ---------- CORREO + NOTIFICACIONES ---------- */
+    /* correo + notificaciones: fila compacta, uno junto al otro, no
+       apiladas con hueco enorme entre medias */
     .top-nav__icon-bar {
         width: 100% !important;
         flex-direction: row !important;
@@ -221,34 +265,33 @@
     .top-nav__icon-bar li:has(.fa-bell) .top-nav--right__icon-link::after {
         content: "Notis";
     }
-    /* Punto de "hay algo nuevo": en vez de intentar reposicionar el
-       badge original del tema (markup desconocido, por eso salia mal
-       colocado), ocultamos ese badge y ponemos nuestro propio punto
-       fijo en la esquina del icono via ::after del propio <i>, que
-       siempre esta en un sitio conocido y predecible. */
-    .top-nav__icon-bar .top-nav--right__icon-link > span,
-    .top-nav__icon-bar .top-nav--right__icon-link > .badge,
-    .top-nav__icon-bar .top-nav--right__icon-link > small {
-        display: none !important;
-    }
-    .top-nav__icon-bar .top-nav--right__icon-link i {
+    /* punto/badge de actividad: pegado a la esquina del propio icono.
+       Cubrimos cualquier elemento hijo del link que no sea el icono <i>
+       principal, ya que el badge puede venir como span/small/em/dot
+       segun el tema */
+    .top-nav__icon-bar .top-nav--right__icon-link {
         position: relative !important;
-        flex: 0 0 auto !important;
     }
-    /* Solo mostramos el punto si el propio tema marca "no leido" con
-       una clase conocida en el <a> (unread/has-unread); si tu tema usa
-       otra clase dimelo y cambio el selector. Por ahora el punto se
-       muestra siempre en Notis a modo de placeholder visible. */
-    .top-nav__icon-bar li:has(.fa-bell) .top-nav--right__icon-link i::after {
-        content: "" !important;
+    .top-nav__icon-bar .top-nav--right__icon-link > *:not(:first-child) {
         position: absolute !important;
-        top: -3px !important;
-        right: -4px !important;
-        width: 8px !important;
-        height: 8px !important;
-        background: #ff3b3b !important;
+        top: 2px !important;
+        left: 18px !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        width: 9px !important;
+        height: 9px !important;
+        min-width: 9px !important;
+        max-width: 9px !important;
+        padding: 0 !important;
+        margin: 0 !important;
         border-radius: 50% !important;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
         border: 2px solid #0a0a0a !important;
+        box-sizing: content-box !important;
     }
 
     .top-nav__icon-bar .top-nav__dropdown {
@@ -263,6 +306,7 @@
         position: relative !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: space-between !important;
         gap: 10px !important;
         width: 100% !important;
         padding: 10px 12px !important;
@@ -271,14 +315,7 @@
         border-radius: 10px !important;
         box-sizing: border-box !important;
     }
-    /* la tarjeta original solo trae la foto de avatar sin texto -> le
-       metemos una etiqueta clara antes del avatar para que se entienda
-       que esto abre el submenu de cuenta, no es un elemento decorativo */
-    .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--touch::before {
-        content: "Mi cuenta";
-        order: -1;
-        margin-right: auto;
-    }
+    /* flecha acordeon tambien aqui, coherente con el menu principal */
     .top-nav__icon-bar .top-nav__dropdown > a.top-nav__dropdown--touch::after {
         content: "\f078";
         font-family: "Font Awesome 5 Free", "Font Awesome 6 Free", FontAwesome;
@@ -286,19 +323,21 @@
         font-size: 0.7rem;
         opacity: 0.5;
         transition: transform 0.2s ease;
-        margin-left: 8px;
+        margin-left: auto;
     }
     .top-nav__icon-bar .top-nav__dropdown.open > a::after,
     .top-nav__icon-bar .top-nav__dropdown:focus-within > a::after {
         transform: rotate(180deg);
     }
     .top-nav__profile-image {
-        width: 28px !important;
-        height: 28px !important;
+        width: 32px !important;
+        height: 32px !important;
         border-radius: 50% !important;
         flex: 0 0 auto !important;
     }
 
+    /* submenu del perfil: TARJETA que empuja el contenido hacia abajo,
+       nunca position:absolute flotando encima de otras cosas */
     .top-nav__icon-bar .top-nav__dropdown ul {
         position: static !important;
         width: 100% !important;
@@ -349,20 +388,20 @@
 
     /* =================================================================
        MENU PRINCIPAL (Torrents / Comunidad / Soporte / Otro)
+       Acordeon a pantalla completa, sin superposiciones ni flotantes.
        ================================================================= */
-    ul.top-nav__main-menus.mobile {
+    .top-nav__main-menus.mobile {
         display: flex !important;
         flex-direction: column !important;
         width: 100% !important;
-        min-height: 40px !important;
-        padding: 4px 16px 20px 16px !important;
-        margin: 0 !important;
+        padding: 4px 16px 0 16px !important;
         box-sizing: border-box !important;
         gap: 0 !important;
-        list-style: none !important;
+        overflow: visible !important;
+        min-height: min-content !important;
+        flex-shrink: 0 !important;
     }
     .top-nav__main-menus.mobile > li {
-        display: block !important;
         width: 100% !important;
         position: static !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
@@ -384,7 +423,6 @@
         font-size: 1rem !important;
         font-weight: 600 !important;
         letter-spacing: 0.02em !important;
-        color: inherit !important;
     }
     .top-nav__main-menus.mobile > li > a.top-nav__dropdown--touch::after,
     .top-nav__main-menus.mobile > li > a:not(.top-nav__dropdown--nontouch):not(.top-nav__dropdown--touch)::after {
@@ -405,6 +443,8 @@
         position: static !important;
     }
 
+    /* TARJETA de submenu: caja bien delimitada con borde y fondo propio,
+       separada del titulo de arriba, en vez de texto suelto flotando */
     .top-nav__main-menus.mobile .top-nav__dropdown ul {
         position: static !important;
         display: none !important;
@@ -693,80 +733,4 @@
     .nobs-bottom-nav a i {
         font-size: 1.2rem !important;
     }
-
-    /* =================================================================
-       TABS SECUNDARIOS (Perfil / Configuracion / Torrents / Actividad /
-       Bono Puntos / Otro) -- dropdown CSS puro por :hover en el tema de
-       escritorio, sin ningun x-data de Alpine. En movil no hay "hover"
-       intermedio: un tap sobre un <a href> navega directo, asi que el
-       submenu nunca llega a abrirse. Necesita JS (ver nobs-mobile-app.js)
-       que le añade una clase .nav-tab-menu--open al hacer tap; aqui solo
-       definimos como se ve esa clase.
-       ================================================================= */
-    /* =================================================================
-       TABS SECUNDARIOS (Perfil / Configuracion / Torrents / Actividad /
-       Bono Puntos / Otro)
-       Sin JS disponible, no hay forma de interceptar el tap sobre un
-       <a href> antes de que navegue (a diferencia del menu hamburguesa,
-       donde el enlace "touch" no tiene href y por eso :focus-within
-       funciona ahi). La unica solucion 100% CSS es dejar de ocultar
-       los submenus: se muestran siempre debajo de cada pestaña, sin
-       necesidad de tocar nada para verlos. */
-    .nav-tabsV2 {
-        display: flex !important;
-        flex-direction: column !important;
-        overflow-x: visible !important;
-        flex-wrap: nowrap !important;
-        gap: 0 !important;
-        width: 100% !important;
-    }
-    .nav-tab-menu {
-        position: static !important;
-        width: 100% !important;
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-        padding: 8px 4px !important;
-        box-sizing: border-box !important;
-    }
-    .nav-tab-menu > a,
-    .nav-tab-menu > span {
-        display: block !important;
-        font-size: 0.95rem !important;
-        font-weight: 700 !important;
-        padding: 4px 4px 6px 4px !important;
-        opacity: 0.95 !important;
-    }
-    .nav-tab-menu__items {
-        position: static !important;
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 6px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: transparent !important;
-        border: none !important;
-    }
-    .nav-tab-menu__items li {
-        flex: 0 0 auto !important;
-    }
-    .nav-tab-menu__items li a {
-        display: flex !important;
-        align-items: center !important;
-        padding: 6px 10px !important;
-        font-size: 0.8rem !important;
-        box-sizing: border-box !important;
-        border-radius: 20px !important;
-        background: rgba(255,255,255,0.06) !important;
-        white-space: nowrap !important;
-    }
-    .nav-tab-menu__items li a:active {
-        background: rgba(255,255,255,0.12) !important;
-    }
-    /* el item "Perfil" (o el que sea) dentro del submenu repite el
-       mismo destino que el titulo de arriba -- no molesta dejarlo,
-       pero si quieres puedes ocultar el primer <li> de cada submenu: */
-    /* .nav-tab-menu__items li:first-child { display: none !important; } */
 }
