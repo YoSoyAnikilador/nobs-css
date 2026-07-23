@@ -31,21 +31,21 @@
         gap: 8px !important;
     }
     /* fila superior: hamburguesa + logo pequeño + titulo grande, todo
-       en la misma linea. .top-nav__toggle es hermano de .top-nav__left
-       dentro de .top-nav, asi que forzamos su orden aqui */
+       en la misma linea, sin saltar a su propia fila. */
     .top-nav__toggle {
         order: 1 !important;
         flex: 0 0 auto !important;
     }
     .top-nav__left {
         order: 2 !important;
-        width: auto !important;
-        flex: 1 1 auto !important;
+        width: 0 !important;
+        flex: 1 1 0% !important;
         display: flex !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
         align-items: center !important;
         gap: 8px !important;
         min-width: 0 !important;
+        overflow: hidden !important;
     }
     .top-nav__branding {
         flex: 0 0 auto !important;
@@ -57,9 +57,9 @@
     .top-nav__site-logo {
         display: block !important;
         order: 2 !important;
-        flex: 0 1 auto !important;
+        flex: 1 1 auto !important;
         min-width: 0 !important;
-        font-size: 1.15rem !important;
+        font-size: 1.1rem !important;
         font-weight: 900 !important;
         letter-spacing: 0.02em !important;
         line-height: 1.15 !important;
@@ -73,7 +73,8 @@
         background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
     }
-    /* buscador: propia fila ancha DEBAJO de la fila hamburguesa+titulo */
+    /* buscador: propia fila ancha DEBAJO de la fila hamburguesa+titulo,
+       con margen a derecha e izquierda para que no toque los bordes */
     .quick-search,
     .quick-search.sf-hidden,
     .quick-search__inputs,
@@ -86,6 +87,8 @@
         min-width: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
+        padding-right: 12px !important;
+        box-sizing: border-box !important;
     }
     .quick-search__inputs {
         position: static !important;
@@ -837,4 +840,4 @@
     .nobs-bottom-nav a i {
         font-size: 1.2rem !important;
     }
-}
+       }
