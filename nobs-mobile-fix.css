@@ -26,59 +26,41 @@
         display: flex !important;
         grid-template: none !important;
         flex-wrap: wrap !important;
-        align-items: center !important;
         padding: 8px 10px !important;
         gap: 8px !important;
     }
-    /* fila superior: hamburguesa + logo pequeño + titulo grande, todo
-       en la misma linea, sin saltar a su propia fila. */
-    .top-nav__toggle {
-        order: 1 !important;
-        flex: 0 0 auto !important;
-    }
     .top-nav__left {
-        order: 2 !important;
-        width: 0 !important;
-        flex: 1 1 0% !important;
+        width: 100% !important;
         display: flex !important;
         flex-wrap: wrap !important;
         align-items: center !important;
         gap: 8px !important;
-        min-width: 0 !important;
     }
     .top-nav__branding {
         flex: 0 0 auto !important;
         order: 1 !important;
-        display: flex !important;
-        align-items: center !important;
     }
     .top-nav__branding img {
         height: 24px !important;
     }
     .top-nav__site-logo {
         display: block !important;
-        order: 2 !important;
-        /* ocupa el resto de la PRIMERA fila (junto al logo pequeño),
-           nunca crece a 100% para no empujar al buscador a compartir
-           esa misma fila */
-        flex: 1 1 auto !important;
-        min-width: 0 !important;
-        font-size: 1.1rem !important;
+        order: 3 !important;
+        flex: 1 1 100% !important;
+        font-size: 1.4rem !important;
         font-weight: 900 !important;
-        letter-spacing: 0.02em !important;
+        letter-spacing: 0.03em !important;
         line-height: 1.15 !important;
         text-transform: uppercase !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        margin: 0 !important;
+        margin: 6px 4px 4px 4px !important;
         background: linear-gradient(90deg, #d080ff, #00e5ff) !important;
         -webkit-background-clip: text !important;
         background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
     }
-    /* buscador: SIEMPRE fuerza su propia fila completa, empujado por
-       flex-basis:100% dentro del contenedor con wrap */
+    /* barra de busqueda: propia fila ancha, entre el logo pequeño de
+       arriba y el titulo grande de abajo, en vez de apretada junto
+       al logo en la misma linea */
     .quick-search,
     .quick-search.sf-hidden,
     .quick-search__inputs,
@@ -86,13 +68,11 @@
         display: block !important;
     }
     .quick-search {
-        order: 3 !important;
-        flex: 0 0 100% !important;
+        order: 2 !important;
+        flex: 1 1 100% !important;
         min-width: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
-        padding-right: 12px !important;
-        box-sizing: border-box !important;
     }
     .quick-search__inputs {
         position: static !important;
@@ -109,6 +89,9 @@
        panel hamburguesa, ver seccion mas abajo */
     .top-nav__left > a[href*="/gaming"] {
         display: none !important;
+    }
+    .top-nav__toggle {
+        flex: 0 0 auto !important;
     }
 
     /* =================================================================
@@ -844,4 +827,4 @@
     .nobs-bottom-nav a i {
         font-size: 1.2rem !important;
     }
-                              }
+}
